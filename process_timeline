@@ -1,0 +1,45 @@
+import json
+
+pathfile = './src/gold-timelines/crisis-egypt/reuters.txt'
+writefile = './src/processed-timeline/crisis-egypt/reuters.json'
+
+
+apText = []
+with open(pathfile) as f:
+    apText = f.readlines()
+    # apText = apText.split('--------------------------------')
+for i in range(len(apText)):
+    apText[i] = apText[i].strip()
+
+# print(apText)
+events = []
+links = []
+
+i = 0
+while i < len(apText) - 1:
+    event = {}
+    # event id
+    index = len(events) + 1
+    event["id"] = index
+    # event data
+    event["date"] = apText[i]
+    event["title"] = ''
+    
+    # add multiple lines of text together
+    while i < len(apText) and apText[i + 1] != '--------------------------------':
+        i += 1
+        event["title"] = event["title"] + apText[i]
+    i += 2
+    event["title"] = event["title"].strip()
+    events.append(event)
+
+    if i is not 0:
+        link = { "type": 'before', "fromId": index, "toId": index - 1 }
+        links.append(link)
+
+data = {}
+data['events'] = events
+data['links'] = links
+
+with open(writefile, 'w') as outfile:
+    json.dump(json.dumps(data), outfile)
