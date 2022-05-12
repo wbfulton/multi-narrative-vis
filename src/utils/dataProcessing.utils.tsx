@@ -1,5 +1,6 @@
 import {
   EventSources,
+  FlowEdge,
   FlowNode,
   Timeline,
 } from '../interfaces/Timeline.interface';
@@ -28,7 +29,41 @@ export const egyptCrisisData: EventSources = {
   },
 };
 
-export const getDateTimeline = (data: EventSources, ticks: number) => {
+export const getTimeline = (data: Timeline, spacing: number, xPos: number) => {
+  const nodes: Array<FlowNode> = [];
+  const edges: Array<FlowEdge> = [];
+
+  const hash = getRandomInt(200, 1000);
+
+  data.events.forEach((event, index) => {
+    nodes.push(
+      nodeCreation(
+        {
+          id: event.id + (hash - 1),
+          title: event.title,
+          date: event.date,
+        },
+        spacing,
+        xPos,
+        nodes?.[index - 1]?.position?.y ?? spacing,
+        index === 0,
+        index === data.events.length - 1
+      )
+    );
+  });
+
+  data.links.forEach((link) => {
+    edges.push(edgeCreation(link.fromId + hash, link.toId + hash));
+  });
+
+  return { nodes, edges };
+};
+
+export const getDateTimeline = (
+  data: EventSources,
+  ticks: number,
+  spacing: number
+) => {
   let oldestDate: Date = new Date();
   let newestDate: Date = new Date(-8640000000000000);
 
@@ -59,6 +94,8 @@ export const getDateTimeline = (data: EventSources, ticks: number) => {
         title: oldestDate.toDateString(),
         date: oldestDate.toDateString(),
       },
+      spacing,
+      0,
       undefined,
       true
     ),
@@ -79,6 +116,8 @@ export const getDateTimeline = (data: EventSources, ticks: number) => {
           title: nextDate.toDateString(),
           date: nextDate.toDateString(),
         },
+        spacing,
+        0,
         nodes[i - 1].position.y,
         false,
         i === ticks
@@ -90,4 +129,10 @@ export const getDateTimeline = (data: EventSources, ticks: number) => {
   }
 
   return { nodes, edges };
+};
+
+const getRandomInt = (min: number, max: number) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 };

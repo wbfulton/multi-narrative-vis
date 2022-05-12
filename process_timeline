@@ -34,7 +34,7 @@ while i < len(apText) - 1:
     events.append(event)
 
     if i is not 0:
-        link = { "type": 'before', "fromId": index, "toId": index - 1 }
+        link = { "type": 'before', "fromId": index - 1, "toId": index }
         links.append(link)
 
 data = {}

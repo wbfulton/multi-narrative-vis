@@ -19,20 +19,20 @@ export const multiNodeCreation = (data: Array<Event>): Array<FlowNode> => {
 
 export const nodeCreation = (
   event: Event,
+  spacing: number,
+  xPos: number,
   lastY?: number,
   input?: boolean,
   output?: boolean
 ): FlowNode => {
-  const spacing = 150;
-
   const y = lastY ? lastY + spacing : spacing;
 
   const node: FlowNode = {
-    id: event.id,
+    id: event.id + '',
     // you can also pass a React component as a label
     data: { label: <div>{event.title}</div> },
     date: event.date,
-    position: { x: 100, y },
+    position: { x: xPos, y },
   };
   if (input) {
     node.type = 'input';
@@ -45,5 +45,9 @@ export const nodeCreation = (
 };
 
 export const edgeCreation = (sourceId: string, targetId: string): FlowEdge => {
-  return { id: `e${sourceId}-${targetId}`, source: sourceId, target: targetId };
+  return {
+    id: `e${sourceId}-${targetId}`,
+    source: sourceId + '',
+    target: targetId + '',
+  };
 };

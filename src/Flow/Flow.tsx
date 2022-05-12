@@ -10,13 +10,28 @@ import ReactFlow, {
 import {
   egyptCrisisData,
   getDateTimeline,
+  getTimeline,
 } from '../utils/dataProcessing.utils';
 
-const dateTimeline = getDateTimeline(egyptCrisisData, 15);
+const dateTimeline = getDateTimeline(egyptCrisisData, 15, 200);
+
+const reutersApTimeline = getTimeline(
+  egyptCrisisData.data['reuters'],
+  200,
+  200
+);
+
+console.log(reutersApTimeline);
 
 function Flow() {
-  const [nodes, setNodes] = useState(dateTimeline.nodes);
-  const [edges, setEdges] = useState(dateTimeline.edges);
+  const [nodes, setNodes] = useState([
+    ...dateTimeline.nodes,
+    ...reutersApTimeline.nodes,
+  ]);
+  const [edges, setEdges] = useState([
+    ...dateTimeline.edges,
+    ...reutersApTimeline.edges,
+  ]);
 
   const onNodesChange = useCallback(
     // @ts-ignore
