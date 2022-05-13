@@ -1,3 +1,5 @@
+import { MarkerType } from 'react-flow-renderer';
+import FlowNodeInterface from '../Components/FlowNodeInterface/FlowNodeInterface';
 import { Event, FlowEdge, FlowNode } from '../interfaces/Timeline.interface';
 
 export const multiNodeCreation = (data: Array<Event>): Array<FlowNode> => {
@@ -17,23 +19,29 @@ export const multiNodeCreation = (data: Array<Event>): Array<FlowNode> => {
   return nodes;
 };
 
-export const nodeCreation = (
-  event: Event,
-  spacing: number,
-  xPos: number,
-  lastY?: number,
-  input?: boolean,
-  output?: boolean
-): FlowNode => {
-  const y = lastY ? lastY + spacing : spacing;
-
+export const nodeCreation = ({
+  event,
+  xPos,
+  yPos,
+  input,
+  output,
+}: {
+  event: Event;
+  xPos: number;
+  yPos: number;
+  input?: boolean;
+  output?: boolean;
+}): FlowNode => {
   const node: FlowNode = {
     id: event.id + '',
-    // you can also pass a React component as a label
-    data: { label: <div>{event.title}</div> },
+    data: {
+      label: <FlowNodeInterface event={event} />,
+    },
+    style: { width: '200px', minHeight: '100px' },
     date: event.date,
-    position: { x: xPos, y },
+    position: { x: xPos, y: yPos },
   };
+
   if (input) {
     node.type = 'input';
   }
@@ -49,5 +57,8 @@ export const edgeCreation = (sourceId: string, targetId: string): FlowEdge => {
     id: `e${sourceId}-${targetId}`,
     source: sourceId + '',
     target: targetId + '',
+    markerEnd: {
+      type: MarkerType.ArrowClosed,
+    },
   };
 };

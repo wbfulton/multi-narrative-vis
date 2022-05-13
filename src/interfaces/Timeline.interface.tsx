@@ -38,3 +38,8 @@ export interface FlowNode extends Node {
 }
 
 export interface FlowEdge extends Edge {}
+
+export interface FlowData {
+  nodes: Array<FlowNode>;
+  edges: Array<FlowEdge>;
+}

@@ -5,32 +5,58 @@ import ReactFlow, {
   applyNodeChanges,
   Background,
   Controls,
+  MiniMap,
 } from 'react-flow-renderer';
 
 import {
   egyptCrisisData,
   getDateTimeline,
   getTimeline,
-} from '../utils/dataProcessing.utils';
+} from '../../utils/dataProcessing.utils';
 
-const dateTimeline = getDateTimeline(egyptCrisisData, 15, 200);
+const dateTimeline = getDateTimeline({
+  data: egyptCrisisData,
+  ticks: 20,
+  spacing: 650,
+});
 
-const reutersApTimeline = getTimeline(
-  egyptCrisisData.data['reuters'],
-  200,
-  200
-);
+const reutersTimeline = getTimeline({
+  data: egyptCrisisData.data['reuters'],
+  dateTimeline,
+});
 
-console.log(reutersApTimeline);
+const apTimeline = getTimeline({
+  data: egyptCrisisData.data['ap'],
+  dateTimeline,
+  lastTimeline: reutersTimeline,
+});
+
+const guardianTimeline = getTimeline({
+  data: egyptCrisisData.data['guardian'],
+  dateTimeline,
+  lastTimeline: reutersTimeline,
+});
+
+const latimesTimeline = getTimeline({
+  data: egyptCrisisData.data['latimes'],
+  dateTimeline,
+  lastTimeline: reutersTimeline,
+});
 
 function Flow() {
   const [nodes, setNodes] = useState([
     ...dateTimeline.nodes,
-    ...reutersApTimeline.nodes,
+    ...reutersTimeline.nodes,
+    // ...apTimeline.nodes,
+    ...guardianTimeline.nodes,
+    ...latimesTimeline.nodes,
   ]);
   const [edges, setEdges] = useState([
     ...dateTimeline.edges,
-    ...reutersApTimeline.edges,
+    ...reutersTimeline.edges,
+    // ...apTimeline.edges,
+    ...guardianTimeline.edges,
+    ...latimesTimeline.edges,
   ]);
 
   const onNodesChange = useCallback(
@@ -56,10 +82,13 @@ function Flow() {
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
-      fitView
+      minZoom={-10000}
+      maxZoom={10000}
+      defaultZoom={-10000}
     >
       <Background />
       <Controls />
+      <MiniMap />
     </ReactFlow>
   );
 }

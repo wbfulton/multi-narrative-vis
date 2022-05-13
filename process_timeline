@@ -1,7 +1,7 @@
 import json
 
-pathfile = './src/gold-timelines/crisis-egypt/reuters.txt'
-writefile = './src/processed-timeline/crisis-egypt/reuters.json'
+pathfile = './src/gold-timelines/crisis-egypt/guardian.txt'
+writefile = './src/processed-timeline/crisis-egypt/guardian.json'
 
 
 apText = []
