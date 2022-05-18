@@ -3,7 +3,8 @@ import './App.css';
 import Flow from './Components/Flow/Flow';
 import useWindowDimensions from './hooks/useWindowDimensions';
 
-// 1. Fix bugs
+// 1. Is timeline worth it?
+// 2. Fix bugs
 // 3. Create labels for edges
 // 5. Clean up Code (easy to read, more modular, no manual px)
 // 6. Show multiple narratives

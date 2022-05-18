@@ -40,7 +40,7 @@ const guardianTimeline = getTimeline({
 const latimesTimeline = getTimeline({
   data: egyptCrisisData.data['latimes'],
   dateTimeline,
-  lastTimeline: reutersTimeline,
+  lastTimeline: guardianTimeline,
 });
 
 function Flow() {

@@ -5,7 +5,7 @@ import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const FlowNodeInterface = ({ event }: { event: Event }) => {
-  const sentences = event.title.split('.');
+  const sentences = event.title.split('. ');
 
   const [showFullContent, toggleFullContent] = useState<boolean>(false);
 
