@@ -8,51 +8,36 @@ import ReactFlow, {
   MiniMap,
 } from 'react-flow-renderer';
 
-import {
-  egyptCrisisData,
-  getDateTimeline,
-  getTimeline,
-} from '../../utils/dataProcessing.utils';
-
-const dateTimeline = getDateTimeline({
-  data: egyptCrisisData,
-  ticks: 20,
-  spacing: 650,
-});
+import { egyptCrisisData, getTimeline } from '../../utils/dataProcessing.utils';
 
 const reutersTimeline = getTimeline({
   data: egyptCrisisData.data['reuters'],
-  dateTimeline,
+  x: 0,
 });
 
 const apTimeline = getTimeline({
   data: egyptCrisisData.data['ap'],
-  dateTimeline,
   lastTimeline: reutersTimeline,
 });
 
 const guardianTimeline = getTimeline({
   data: egyptCrisisData.data['guardian'],
-  dateTimeline,
-  lastTimeline: reutersTimeline,
+  lastTimeline: apTimeline,
 });
 
 const latimesTimeline = getTimeline({
   data: egyptCrisisData.data['latimes'],
-  dateTimeline,
   lastTimeline: guardianTimeline,
 });
 
 function Flow() {
   const [nodes, setNodes] = useState([
-    ...dateTimeline.nodes,
     ...reutersTimeline.nodes,
     // ...apTimeline.nodes,
     ...guardianTimeline.nodes,
     ...latimesTimeline.nodes,
   ]);
   const [edges, setEdges] = useState([
-    ...dateTimeline.edges,
     ...reutersTimeline.edges,
     // ...apTimeline.edges,
     ...guardianTimeline.edges,

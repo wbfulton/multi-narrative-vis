@@ -30,21 +30,23 @@ export const egyptCrisisData: EventSources = {
   },
 };
 
+const getLastY = (lastTimeline?: FlowData): number => {
+  return lastTimeline?.nodes?.length ?? 0;
+};
+
 export const getTimeline = ({
   data,
-  dateTimeline,
+  x,
   lastTimeline,
 }: {
   data: Timeline;
-  dateTimeline: FlowData;
   lastTimeline?: FlowData;
+  x?: number;
 }) => {
   const nodes: Array<FlowNode> = [];
   const edges: Array<FlowEdge> = [];
 
-  const hash = getRandomInt(200, 1000);
-
-  let xPos = dateTimeline.nodes[0].position.x + 300;
+  let xPos = x ? x + 300 : 0;
   if (lastTimeline) {
     let maxX = 0;
     lastTimeline.nodes.forEach(
@@ -52,19 +54,18 @@ export const getTimeline = ({
     );
     xPos = maxX + 300;
   }
-  console.log(xPos);
 
   // find rightmost node from last timeline
   data.events.forEach((event, index) => {
     nodes.push(
       nodeCreation({
         event: {
-          id: event.id + (hash - 1),
+          id: getLastY(lastTimeline) + event.id,
           title: event.title,
           date: event.date,
         },
         xPos,
-        yPos: getYFromTimeline({ date: new Date(event.date), dateTimeline }),
+        yPos: nodes.length > 0 ? nodes[nodes.length - 1].position.y + 200 : 0,
         input: index === 0,
         output: index === data.events.length - 1,
       })
@@ -115,14 +116,21 @@ export const getTimeline = ({
   });
 
   // shift timeline to account for overlapping nodes
-  const longestSequence = overlapSequences.sort((a, b) => {
-    return b.length - a.length;
-  })[0];
-  const nodeShift = Math.floor(longestSequence.length / 2) - 1;
-  nodes.map((node) => (node.position.x += nodeShift * xShift));
+  if (overlapSequences.length > 0) {
+    const longestSequence = overlapSequences.sort((a, b) => {
+      return b.length - a.length;
+    })[0];
+    const nodeShift = Math.floor(longestSequence.length / 2) - 1;
+    nodes.map((node) => (node.position.x += nodeShift * xShift));
+  }
 
   data.links.forEach((link) => {
-    edges.push(edgeCreation(link.fromId + hash, link.toId + hash));
+    edges.push(
+      edgeCreation(
+        getLastY(lastTimeline) + link.fromId,
+        getLastY(lastTimeline) + link.toId
+      )
+    );
   });
 
   return { nodes, edges };
@@ -223,10 +231,4 @@ export const getDateTimeline = ({
   }
 
   return { nodes, edges };
-};
-
-const getRandomInt = (min: number, max: number) => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.random() * (max - min + 1) + min;
 };

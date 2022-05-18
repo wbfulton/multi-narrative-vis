@@ -16,10 +16,10 @@ events = []
 links = []
 
 i = 0
-while i < len(apText) - 1:
+while i < len(apText):
     event = {}
     # event id
-    index = len(events) + 1
+    index = 0 if len(events) == 0 else len(events)
     event["id"] = index
     # event data
     event["date"] = apText[i]
@@ -33,8 +33,8 @@ while i < len(apText) - 1:
     event["title"] = event["title"].strip()
     events.append(event)
 
-    if i is not 0:
-        link = { "type": 'before', "fromId": index - 1, "toId": index }
+    if i < len(apText) - 1:
+        link = { "type": 'before', "fromId": index , "toId": index + 1}
         links.append(link)
 
 data = {}

@@ -5,22 +5,16 @@ import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const FlowNodeInterface = ({ event }: { event: Event }) => {
-  const sentences = event.title.split('. ');
+  const characters = event.title.split('');
 
   const [showFullContent, toggleFullContent] = useState<boolean>(false);
 
   return (
     <div>
       <p>{event.date}</p>
-      <p>{sentences[0]}</p>
-      {sentences.length > 2 && showFullContent && (
-        <div>
-          {sentences.slice(1).map((sentence, index) => (
-            <p key={index}>{sentence}</p>
-          ))}
-        </div>
-      )}
-      {sentences.length > 2 && (
+      {!showFullContent && <p>{characters.slice(0, 100)}...</p>}
+      {characters.length > 100 && showFullContent && <div>{characters}</div>}
+      {characters.length > 100 && (
         <FontAwesomeIcon
           className={styles.icon}
           icon={showFullContent ? faChevronUp : faChevronDown}
