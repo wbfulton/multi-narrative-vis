@@ -9,6 +9,7 @@ import ReactFlow, {
 } from 'react-flow-renderer';
 
 import { egyptCrisisData, getTimeline } from '../../utils/dataProcessing.utils';
+import { edgeCreation, nodeCreation } from '../../utils/flow.utils';
 
 const reutersTimeline = getTimeline({
   data: egyptCrisisData.data['reuters'],
@@ -30,16 +31,36 @@ const latimesTimeline = getTimeline({
   lastTimeline: guardianTimeline,
 });
 
+const allData = [
+  reutersTimeline,
+  apTimeline,
+  guardianTimeline,
+  latimesTimeline,
+];
+
+const initialNode = nodeCreation({
+  event: { id: '0', title: 'Egypt Crises', date: '2011-01-01' },
+  xPos: allData[allData.length - 1].nodes[0].position.x / 2,
+  yPos: -200,
+  input: true,
+});
+
+const initalEdges = allData.map((data) => {
+  return edgeCreation('0', data.nodes[0].id);
+});
+
 function Flow() {
   const [nodes, setNodes] = useState([
+    initialNode,
     ...reutersTimeline.nodes,
-    // ...apTimeline.nodes,
+    ...apTimeline.nodes,
     ...guardianTimeline.nodes,
     ...latimesTimeline.nodes,
   ]);
   const [edges, setEdges] = useState([
+    ...initalEdges,
     ...reutersTimeline.edges,
-    // ...apTimeline.edges,
+    ...apTimeline.edges,
     ...guardianTimeline.edges,
     ...latimesTimeline.edges,
   ]);

@@ -12,7 +12,12 @@ const FlowNodeInterface = ({ event }: { event: Event }) => {
   return (
     <div>
       <p>{event.date}</p>
-      {!showFullContent && <p>{characters.slice(0, 100)}...</p>}
+      {!showFullContent && (
+        <p>
+          {characters.slice(0, 100)}
+          {characters.length > 100 ? '...' : ''}
+        </p>
+      )}
       {characters.length > 100 && showFullContent && <div>{characters}</div>}
       {characters.length > 100 && (
         <FontAwesomeIcon

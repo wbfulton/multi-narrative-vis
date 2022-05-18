@@ -31,7 +31,9 @@ export const egyptCrisisData: EventSources = {
 };
 
 const getLastY = (lastTimeline?: FlowData): number => {
-  return lastTimeline?.nodes?.length ?? 0;
+  const lastNode = lastTimeline?.nodes?.[lastTimeline?.nodes?.length - 1];
+  const parsedNodeId = Number.parseInt(lastNode?.id ?? '0');
+  return parsedNodeId !== 0 ? parsedNodeId : parsedNodeId + 1;
 };
 
 export const getTimeline = ({
@@ -60,13 +62,12 @@ export const getTimeline = ({
     nodes.push(
       nodeCreation({
         event: {
-          id: getLastY(lastTimeline) + event.id,
+          id: getLastY(lastTimeline) + 1 + event.id,
           title: event.title,
           date: event.date,
         },
         xPos,
         yPos: nodes.length > 0 ? nodes[nodes.length - 1].position.y + 200 : 0,
-        input: index === 0,
         output: index === data.events.length - 1,
       })
     );
@@ -127,8 +128,8 @@ export const getTimeline = ({
   data.links.forEach((link) => {
     edges.push(
       edgeCreation(
-        getLastY(lastTimeline) + link.fromId,
-        getLastY(lastTimeline) + link.toId
+        getLastY(lastTimeline) + 1 + link.fromId,
+        getLastY(lastTimeline) + 1 + link.toId
       )
     );
   });
