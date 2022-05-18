@@ -8,27 +8,35 @@ import ReactFlow, {
   MiniMap,
 } from 'react-flow-renderer';
 
+import * as chroma from 'chroma.ts';
+
 import { egyptCrisisData, getTimeline } from '../../utils/dataProcessing.utils';
 import { edgeCreation, nodeCreation } from '../../utils/flow.utils';
+
+const colorScale = chroma.scale('Spectral');
 
 const reutersTimeline = getTimeline({
   data: egyptCrisisData.data['reuters'],
   x: 0,
+  color: colorScale(0.1),
 });
 
 const apTimeline = getTimeline({
   data: egyptCrisisData.data['ap'],
   lastTimeline: reutersTimeline,
+  color: colorScale(0.2),
 });
 
 const guardianTimeline = getTimeline({
   data: egyptCrisisData.data['guardian'],
   lastTimeline: apTimeline,
+  color: colorScale(0.3),
 });
 
 const latimesTimeline = getTimeline({
   data: egyptCrisisData.data['latimes'],
   lastTimeline: guardianTimeline,
+  color: colorScale(0.4),
 });
 
 const allData = [

@@ -7,6 +7,8 @@ import {
 } from '../interfaces/Timeline.interface';
 import { edgeCreation, nodeCreation } from './flow.utils';
 
+import * as chroma from 'chroma.ts';
+
 const reutersEgyptData: Timeline = JSON.parse(
   require('../processed-timeline/crisis-egypt/reuters.json')
 );
@@ -40,10 +42,12 @@ export const getTimeline = ({
   data,
   x,
   lastTimeline,
+  color,
 }: {
   data: Timeline;
   lastTimeline?: FlowData;
   x?: number;
+  color: chroma.Color;
 }) => {
   const nodes: Array<FlowNode> = [];
   const edges: Array<FlowEdge> = [];
@@ -69,6 +73,7 @@ export const getTimeline = ({
         xPos,
         yPos: nodes.length > 0 ? nodes[nodes.length - 1].position.y + 200 : 0,
         output: index === data.events.length - 1,
+        color,
       })
     );
   });

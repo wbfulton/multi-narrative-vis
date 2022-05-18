@@ -2,6 +2,8 @@ import { MarkerType } from 'react-flow-renderer';
 import FlowNodeInterface from '../Components/FlowNodeInterface/FlowNodeInterface';
 import { Event, FlowEdge, FlowNode } from '../interfaces/Timeline.interface';
 
+import * as chroma from 'chroma.ts';
+
 export const multiNodeCreation = (data: Array<Event>): Array<FlowNode> => {
   const nodes: Array<FlowNode> = [];
   const spacing = 150;
@@ -25,19 +27,26 @@ export const nodeCreation = ({
   yPos,
   input,
   output,
+  color,
 }: {
   event: Event;
   xPos: number;
   yPos: number;
   input?: boolean;
   output?: boolean;
+  color?: chroma.Color;
 }): FlowNode => {
   const node: FlowNode = {
     id: event.id + '',
     data: {
       label: <FlowNodeInterface event={event} />,
     },
-    style: { width: '200px', minHeight: '100px' },
+    style: {
+      width: '200px',
+      minHeight: '100px',
+      borderColor: `${color}`,
+      borderWidth: '3px',
+    },
     date: event.date,
     position: { x: xPos, y: yPos },
   };
