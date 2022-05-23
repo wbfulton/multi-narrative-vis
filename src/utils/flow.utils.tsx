@@ -35,11 +35,13 @@ export const identityNodeCreation = ({
   input,
   output,
   sourceColors,
+  width,
 }: {
   events: Array<Event>;
   xPos: number;
   yPos: number;
   sourceColors: Map<string, chroma.Color>;
+  width: number;
   input?: boolean;
   output?: boolean;
 }): IdentityFlowNode => {
@@ -64,7 +66,7 @@ export const identityNodeCreation = ({
     },
     events,
     date: events[0].date,
-    position: { x: xPos, y: yPos },
+    position: { x: xPos + width / 2, y: yPos },
   };
 
   if (input) {
@@ -84,10 +86,12 @@ export const nodeCreation = ({
   input,
   output,
   color,
+  width,
 }: {
   event: Event;
   xPos: number;
   yPos: number;
+  width: number;
   input?: boolean;
   output?: boolean;
   color?: chroma.Color;
@@ -113,7 +117,7 @@ export const nodeCreation = ({
     },
     sourcePosition: Position.Bottom,
     date: event.date,
-    position: { x: xPos, y: yPos },
+    position: { x: xPos + width / 2, y: yPos },
   };
 
   if (input) {

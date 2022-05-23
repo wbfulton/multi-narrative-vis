@@ -24,7 +24,7 @@ import { createEdge, nodeCreation } from '../../utils/flow.utils';
 
 const colorScale = chroma.cubehelix().lightness([0.3, 0.7]);
 
-function Flow() {
+function Flow({ width }: { width: number }) {
   const data: Timeline = JSON.parse(
     require('../../processed-timeline/crisis-egypt.json')
   );
@@ -61,6 +61,7 @@ function Flow() {
       xPos: Math.floor(allSources.length / 2) * 250,
       yPos: 0,
       input: true,
+      width,
     }),
     nodeCreation({
       event: {
@@ -71,6 +72,7 @@ function Flow() {
       },
       xPos: Math.floor(allSources.length / 2) * 250,
       yPos: 175,
+      width,
     }),
   ];
 
@@ -88,13 +90,15 @@ function Flow() {
         yPos: 175,
         color: sourceColors.get(source),
         output: true,
+        width,
       })
     );
   });
 
   const { identityNodes, newLinks, newEvents } = createIdentityNodes(
     data,
-    sourceColors
+    sourceColors,
+    width
   );
 
   const metadataLinks: Array<TemporalLink> = [
@@ -139,6 +143,7 @@ function Flow() {
       input: index === 0,
       output: index === newEvents.length - 1,
       color: sourceColors.get(event.filename),
+      width,
     });
 
     lastNode = node;
@@ -205,6 +210,7 @@ function Flow() {
     ...fixedNodes,
     ...metadataNodes,
   ]);
+
   const [edges, setEdges] = useState(links);
 
   const onNodesChange = useCallback(
@@ -235,7 +241,7 @@ function Flow() {
       defaultZoom={-10000}
     >
       <Background />
-      <Controls />
+      <Controls></Controls>
       <MiniMap />
     </ReactFlow>
   );

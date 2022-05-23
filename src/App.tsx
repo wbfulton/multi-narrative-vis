@@ -8,14 +8,9 @@ function App() {
 
   return (
     <div className="App">
-      <div>
-        <input type="radio" value="Male" name="gender" /> Male
-        <input type="radio" value="Female" name="gender" /> Female
-        <input type="radio" value="Other" name="gender" /> Other
-      </div>
       <div className="data">
         <div style={{ height, width }}>
-          <Flow />
+          <Flow width={width} />
         </div>
       </div>
     </div>
