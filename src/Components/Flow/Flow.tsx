@@ -14,7 +14,6 @@ import {
   createIdentityNodes,
   nextYPos,
 } from '../../utils/dataProcessing.utils';
-import CoreferenceNode from '../CoreferenceNode/CoferenceNode';
 import {
   FlowNode,
   TemporalLink,
@@ -24,8 +23,6 @@ import {
 import { createEdge, nodeCreation } from '../../utils/flow.utils';
 
 const colorScale = chroma.cubehelix().lightness([0.3, 0.7]);
-
-const nodeTypes = { coreferenceNode: CoreferenceNode };
 
 function Flow() {
   const data: Timeline = JSON.parse(
@@ -37,6 +34,11 @@ function Flow() {
     if (!allSources.includes(ev.filename)) {
       allSources.push(ev.filename);
     }
+  });
+
+  const sourceColors: Map<string, chroma.Color> = new Map();
+  allSources.forEach((source, index) => {
+    sourceColors.set(source, colorScale(index / allSources.length + 0.1));
   });
 
   const sourcePositionMapping: Array<number> = [];
@@ -84,13 +86,16 @@ function Flow() {
         },
         xPos: sourcePositionMapping[index],
         yPos: 175,
-        color: colorScale(index / allSources.length + 0.1),
+        color: sourceColors.get(source),
         output: true,
       })
     );
   });
 
-  const { identityNodes, newLinks, newEvents } = createIdentityNodes(data);
+  const { identityNodes, newLinks, newEvents } = createIdentityNodes(
+    data,
+    sourceColors
+  );
 
   const metadataLinks: Array<TemporalLink> = [
     { sourceId: '0-meta', targetId: '1-meta', type: TLINK_TYPES.BEFORE },
@@ -133,9 +138,7 @@ function Flow() {
       yPos: nextYPos(event, lastNode), // create all yPos in order
       input: index === 0,
       output: index === newEvents.length - 1,
-      color: colorScale(
-        allSources.indexOf(event.filename) / allSources.length + 0.1
-      ),
+      color: sourceColors.get(event.filename),
     });
 
     lastNode = node;
@@ -188,13 +191,9 @@ function Flow() {
       let color: any = 'black';
 
       if (sourceFilename !== TLINK_TYPES.IDENTITY) {
-        color = colorScale(
-          allSources.indexOf(sourceFilename) / allSources.length + 0.1
-        );
+        color = sourceColors.get(sourceFilename);
       } else if (targetFilename !== TLINK_TYPES.IDENTITY) {
-        color = colorScale(
-          allSources.indexOf(targetFilename) / allSources.length + 0.1
-        );
+        color = sourceColors.get(targetFilename);
       }
 
       return createEdge(sourceId, targetId, { ...style, stroke: color });
@@ -228,7 +227,6 @@ function Flow() {
     <ReactFlow
       nodes={nodes}
       edges={edges}
-      nodeTypes={nodeTypes}
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}

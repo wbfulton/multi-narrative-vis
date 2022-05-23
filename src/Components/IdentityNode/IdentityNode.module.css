@@ -1,0 +1,12 @@
+.source {
+  border: 0.1em solid #ffffff;
+  margin: 0 0.3em 0.3em 0;
+  padding: 0.35em 1.2em;
+  border-radius: 3px;
+  text-decoration: none;
+}
+
+.source:hover {
+  filter: brightness(90%);
+  cursor: pointer;
+}

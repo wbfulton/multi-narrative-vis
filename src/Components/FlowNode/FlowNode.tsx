@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './FlowNodeInterface.module.css';
+import styles from './FlowNode.module.css';
 import { Event } from '../../interfaces/Timeline.interface';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

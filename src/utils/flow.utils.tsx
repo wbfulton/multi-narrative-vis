@@ -1,5 +1,4 @@
 import { MarkerType, Position } from 'react-flow-renderer';
-import FlowNodeInterface from '../Components/FlowNodeInterface/FlowNodeInterface';
 import {
   Event,
   FlowEdge,
@@ -9,6 +8,8 @@ import {
 } from '../interfaces/Timeline.interface';
 
 import * as chroma from 'chroma.ts';
+import IdentityNode from '../Components/IdentityNode/IdentityNode';
+import FlowNodeInterface from '../Components/FlowNode/FlowNode';
 
 export const multiNodeCreation = (data: Array<Event>): Array<FlowNode> => {
   const nodes: Array<FlowNode> = [];
@@ -33,24 +34,24 @@ export const identityNodeCreation = ({
   yPos,
   input,
   output,
-  color,
+  sourceColors,
 }: {
   events: Array<Event>;
   xPos: number;
   yPos: number;
+  sourceColors: Map<string, chroma.Color>;
   input?: boolean;
   output?: boolean;
-  color?: chroma.Color;
 }): IdentityFlowNode => {
   const node: IdentityFlowNode = {
     id: 'ident-' + events[0].id,
     data: {
       filename: TLINK_TYPES.IDENTITY,
-      label: <FlowNodeInterface event={events[0]} />,
+      label: <IdentityNode events={events} sourceColors={sourceColors} />,
       style: {
         width: '200px',
         minHeight: '100px',
-        borderColor: `${color}`,
+        borderColor: `${'black'}`,
         borderWidth: '3px',
       },
       events,
@@ -58,7 +59,7 @@ export const identityNodeCreation = ({
     style: {
       width: '200px',
       minHeight: '100px',
-      borderColor: `${color}`,
+      borderColor: `${'black'}`,
       borderWidth: '3px',
     },
     events,

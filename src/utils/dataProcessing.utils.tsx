@@ -13,7 +13,10 @@ import { createEdge, identityNodeCreation, nodeCreation } from './flow.utils';
 
 import * as chroma from 'chroma.ts';
 
-export const createIdentityNodes = (data: Timeline) => {
+export const createIdentityNodes = (
+  data: Timeline,
+  sourceColors: Map<string, chroma.Color>
+) => {
   // merge ids
   const identityLinks = data.links.filter(
     (link) => link.type === TLINK_TYPES.IDENTITY
@@ -92,6 +95,7 @@ export const createIdentityNodes = (data: Timeline) => {
           }),
         xPos: Math.floor(allSources.length / 2) * 250,
         yPos: 300 * index,
+        sourceColors,
         // output: index === mergedIds.length - 1,
       })
     );
