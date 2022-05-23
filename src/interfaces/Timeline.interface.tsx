@@ -2,8 +2,9 @@ import { Node, Edge } from 'react-flow-renderer';
 
 export interface TemporalLink {
   type: TLINK_TYPES;
-  fromId: string;
-  toId: string;
+  sourceId: string;
+  targetId: string;
+  style?: any;
 }
 
 export interface Timeline {
@@ -17,10 +18,10 @@ export interface EventSources {
 }
 
 export enum TLINK_TYPES {
-  BEFORE = 'BEFORE',
-  OVERLAPS = 'OVERLAPS',
-  CONTAINS = 'CONTAINS',
-  IDENTITY = 'IDENTITY',
+  BEFORE = 'before',
+  OVERLAPS = 'overlaps',
+  CONTAINS = 'contains',
+  IDENTITY = 'identity',
 }
 
 export interface CLINK {
@@ -31,9 +32,16 @@ export interface Event {
   id: string;
   title: string;
   date: string;
+  filename: string;
+  type?: string;
 }
 
 export interface FlowNode extends Node {
+  date: string;
+}
+
+export interface IdentityFlowNode extends Node {
+  events: Array<Event>;
   date: string;
 }
 

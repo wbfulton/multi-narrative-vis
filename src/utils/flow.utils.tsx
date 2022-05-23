@@ -1,6 +1,12 @@
-import { MarkerType } from 'react-flow-renderer';
+import { MarkerType, Position } from 'react-flow-renderer';
 import FlowNodeInterface from '../Components/FlowNodeInterface/FlowNodeInterface';
-import { Event, FlowEdge, FlowNode } from '../interfaces/Timeline.interface';
+import {
+  Event,
+  FlowEdge,
+  FlowNode,
+  IdentityFlowNode,
+  TLINK_TYPES,
+} from '../interfaces/Timeline.interface';
 
 import * as chroma from 'chroma.ts';
 
@@ -21,6 +27,55 @@ export const multiNodeCreation = (data: Array<Event>): Array<FlowNode> => {
   return nodes;
 };
 
+export const identityNodeCreation = ({
+  events,
+  xPos,
+  yPos,
+  input,
+  output,
+  color,
+}: {
+  events: Array<Event>;
+  xPos: number;
+  yPos: number;
+  input?: boolean;
+  output?: boolean;
+  color?: chroma.Color;
+}): IdentityFlowNode => {
+  const node: IdentityFlowNode = {
+    id: 'ident-' + events[0].id,
+    data: {
+      filename: TLINK_TYPES.IDENTITY,
+      label: <FlowNodeInterface event={events[0]} />,
+      style: {
+        width: '200px',
+        minHeight: '100px',
+        borderColor: `${color}`,
+        borderWidth: '3px',
+      },
+      events,
+    },
+    style: {
+      width: '200px',
+      minHeight: '100px',
+      borderColor: `${color}`,
+      borderWidth: '3px',
+    },
+    events,
+    date: events[0].date,
+    position: { x: xPos, y: yPos },
+  };
+
+  if (input) {
+    node.type = 'input';
+  }
+  if (output) {
+    node.type = 'output';
+  }
+
+  return node;
+};
+
 export const nodeCreation = ({
   event,
   xPos,
@@ -38,8 +93,16 @@ export const nodeCreation = ({
 }): FlowNode => {
   const node: FlowNode = {
     id: event.id + '',
+    type: event.type,
     data: {
+      filename: event.filename,
       label: <FlowNodeInterface event={event} />,
+      style: {
+        width: '200px',
+        minHeight: '100px',
+        borderColor: `${color}`,
+        borderWidth: '3px',
+      },
     },
     style: {
       width: '200px',
@@ -47,6 +110,7 @@ export const nodeCreation = ({
       borderColor: `${color}`,
       borderWidth: '3px',
     },
+    sourcePosition: Position.Bottom,
     date: event.date,
     position: { x: xPos, y: yPos },
   };
@@ -61,13 +125,22 @@ export const nodeCreation = ({
   return node;
 };
 
-export const edgeCreation = (sourceId: string, targetId: string): FlowEdge => {
-  return {
+export const createEdge = (
+  sourceId: string,
+  targetId: string,
+  style?: any
+): FlowEdge => {
+  let edge = {
     id: `e${sourceId}-${targetId}`,
     source: sourceId + '',
     target: targetId + '',
+    style,
     markerEnd: {
       type: MarkerType.ArrowClosed,
     },
   };
+  if (style) {
+    edge.style = style;
+  }
+  return edge;
 };
