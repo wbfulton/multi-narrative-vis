@@ -1,12 +1,4 @@
-import { useCallback, useState } from 'react';
-import ReactFlow, {
-  addEdge,
-  applyEdgeChanges,
-  applyNodeChanges,
-  Background,
-  Controls,
-  MiniMap,
-} from 'react-flow-renderer';
+import ReactFlow, { Background, Controls, MiniMap } from 'react-flow-renderer';
 
 import * as chroma from 'chroma.ts';
 
@@ -24,11 +16,8 @@ import { createEdge, nodeCreation } from '../../utils/flow.utils';
 
 const colorScale = chroma.cubehelix().lightness([0.3, 0.7]);
 
-function Flow({ width }: { width: number }) {
-  const data: Timeline = JSON.parse(
-    require('../../processed-timeline/crisis-egypt.json')
-  );
-
+function Flow({ data, width }: { data: Timeline; width: number }) {
+  console.log(typeof data, data);
   const allSources: Array<string> = [];
   data.events.forEach((ev) => {
     if (!allSources.includes(ev.filename)) {
@@ -204,38 +193,10 @@ function Flow({ width }: { width: number }) {
       return createEdge(sourceId, targetId, { ...style, stroke: color });
     }
   );
-
-  const [nodes, setNodes] = useState([
-    ...identityNodes,
-    ...fixedNodes,
-    ...metadataNodes,
-  ]);
-
-  const [edges, setEdges] = useState(links);
-
-  const onNodesChange = useCallback(
-    // @ts-ignore
-    (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
-    [setNodes]
-  );
-  const onEdgesChange = useCallback(
-    // @ts-ignore
-    (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
-    [setEdges]
-  );
-  const onConnect = useCallback(
-    // @ts-ignore
-    (connection) => setEdges((eds) => addEdge(connection, eds)),
-    [setEdges]
-  );
-
   return (
     <ReactFlow
-      nodes={nodes}
-      edges={edges}
-      onNodesChange={onNodesChange}
-      onEdgesChange={onEdgesChange}
-      onConnect={onConnect}
+      nodes={[...identityNodes, ...fixedNodes, ...metadataNodes]}
+      edges={links}
       minZoom={-10000}
       maxZoom={10000}
       defaultZoom={-10000}

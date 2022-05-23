@@ -40,6 +40,7 @@
 .data {
   display: flex;
   justify-content: flex-start;
+  margin: 10px;
 }
 
 .event {
@@ -54,4 +55,24 @@
   width: 800px;
   border-radius: 10px;
   font-size: 10px;
+}
+
+.dataset {
+  border: 0.1em solid #ffffff;
+  margin: 0 0.3em 0.3em 0;
+  padding: 0.35em 1.2em;
+  border-radius: 3px;
+  text-decoration: none;
+}
+
+.dataset:hover {
+  filter: brightness(90%);
+  cursor: pointer;
+}
+
+.customArea {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
 }
