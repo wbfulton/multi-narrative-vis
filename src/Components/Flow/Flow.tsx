@@ -17,7 +17,6 @@ import { createEdge, nodeCreation } from '../../utils/flow.utils';
 const colorScale = chroma.cubehelix().lightness([0.3, 0.7]);
 
 function Flow({ data, width }: { data: Timeline; width: number }) {
-  console.log(typeof data, data);
   const allSources: Array<string> = [];
   data.events.forEach((ev) => {
     if (!allSources.includes(ev.filename)) {
@@ -55,7 +54,7 @@ function Flow({ data, width }: { data: Timeline; width: number }) {
     nodeCreation({
       event: {
         id: `${1}-meta`,
-        title: 'Common Ground Narrative',
+        title: 'Common Events',
         date: '',
         filename: TLINK_TYPES.IDENTITY,
       },
